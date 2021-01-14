@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block headline %}
+  Cities
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% for city in cities %}
+    <p><a href="/city/{{ city.lower().replace(' ', '-') }}">{{ city.title() }}</a></p>
+  {% endfor %}
+</div>
+{% endblock %}

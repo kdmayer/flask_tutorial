@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+{% block headline %}
+  {{ school.SCHOOLNAME.title() }}
+{% endblock %}
+{% block subhead %}
+  {{ school.ADDRESS.title() }}, {{ school.city.title() }}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <p><strong>School type:</strong> {{ school.SCH_TYPE }}</p>
+      <p></p>
+      <p></p>
+    </div>
+    <div class="col">
+      <div id='map' style='width: 100%; height: 300px;'></div>
+    </div>
+  </div>
+</div>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoianNvbWEiLCJhIjoibFJmYl9JWSJ9.AUm8d76cbOvVEn2mMeG_ZA';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v10',
+      center: [-74, 40.71],
+      zoom: 9
+    });
+
+    map.on('load', function() {
+      var geojsonData = {
+        "type": "FeatureCollection",
+        "features": [{
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [{{ school.longitude }}, {{ school.latitude }}]
+          }
+        }]
+      };
+      map.addLayer({
+        "id": "points",
+        "type": "circle",
+        "source": {
+          "type": "geojson",
+          "data": geojsonData
+        },
+      "paint": {
+      "circle-radius": 5,
+      "circle-color": "#ECCB2F",
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "black"
+    }
+      })
+    })
+  </script>
+{% endblock %}
+
+<!-- Create an empty box on your page to be filled with your map, eventually.
+Remember an "h1" is a headline and a "p" is a paragraph, but a "div" does not really mean anything.
+Initialize your MapBox GL in the first 5 lines.
+We then use map.on('load') ... to wait for the map to load. Once it is ready, we start to assemble our data.
+MapBox GL uses a data format called GeoJSON to keep track of points, lines, shapes and such. You can play around with it at geojson.io,
+but the basic idea is that a single point or line or shape or whatever is called a Feature and a bunch of features is called a FeatureCollection.
+In this case we have exactly one feature, and it’s a Point with coordinates at a latitude and longitude of [0, 0].
+We’re using addLayer to attach our geojsonData to our map. You can tell all sorts of stuff to your map, from styling and interaction,
+but we’re just saying “hey, this is a bunch of circles, draw some circles.” Not very exciting, but it gets the job done.-->

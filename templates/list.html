@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block headline %}
+  There are {{ "{:,}".format(count) }} schools in {{ location.title() }}
+{% endblock %}
+{% block subhead %}
+  It's pretty cool.
+{% endblock %}
+{% block content %}
+<div class="container">
+    <p>I'm amazed and frankly you should be, too.</p>
+    {% for school in schools %}
+      <p><a href="/schools/{{ school.LOC_CODE }}">{{ school.SCHOOLNAME }}</a></p>
+    {% endfor %}
+</div>
+{% endblock %}
